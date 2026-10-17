@@ -1,5 +1,4 @@
-// lib/api.ts
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 export class AppError extends Error {
   status: number;
@@ -10,18 +9,24 @@ export class AppError extends Error {
   }
 }
 
-export function asyncHandler(handler: (...args: any[]) => Promise<Response>) {
-  return async (...args: any[]) => {
+export function asyncHandler(
+  handler: (req: NextRequest) => Promise<Response>,
+): (req: NextRequest) => Promise<Response> {
+  return async (req: NextRequest) => {
     try {
-      return await handler(...args);
+      return await handler(req);
     } catch (error: any) {
-        console.error(error);
       if (error instanceof AppError) {
         return NextResponse.json(
           { error: error.message },
           { status: error.status },
         );
       }
+      console.error(error);
+      return NextResponse.json(
+        { error: "Something went wrong" },
+        { status: 500 },
+      );
     }
   };
 }

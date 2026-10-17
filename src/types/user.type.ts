@@ -1,5 +1,5 @@
 export interface User {
-    id: string;
+    _id: string;
     name: string;
     email: string;
     password: string;
@@ -21,6 +21,6 @@ export interface LoginUser {
 }
 
 export interface JWTpayload {
-    userid: string;
+    userId: string;
     email?: string;
 }
