@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema<User>(
       type: String,
       required: false,
       minlength: [10, "Mobile number must be at least 10 characters long"],
+      maxlength: [10, "Mobile number must be at least 10 characters long"],
     },
   },
   {
@@ -32,11 +33,11 @@ const userSchema = new mongoose.Schema<User>(
 
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
-  this.password = bcrypt.hashSync(this.password, 10);
+  this.password = await bcrypt.hash(this.password, 10);
 });
 
 userSchema.methods.comparePassword = async function (password: string) {
-  return bcrypt.compareSync(password, this.password);
+  return await bcrypt.compare(password, this.password);
 };
 
 const UserModel = mongoose.model<User>("User", userSchema);

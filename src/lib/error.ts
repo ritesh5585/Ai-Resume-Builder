@@ -1,3 +1,4 @@
+import { ApiResponse } from "@/types/api.type";
 import { NextResponse, NextRequest } from "next/server";
 
 export class AppError extends Error {
@@ -17,14 +18,14 @@ export function asyncHandler(
       return await handler(req);
     } catch (error: any) {
       if (error instanceof AppError) {
-        return NextResponse.json(
-          { error: error.message },
+        return NextResponse.json<ApiResponse>(
+          { success: false, message: error.message },
           { status: error.status },
         );
       }
       console.error(error);
-      return NextResponse.json(
-        { error: "Something went wrong" },
+      return NextResponse.json<ApiResponse>(
+        { success: false, message: "Something went wrong", error },
         { status: 500 },
       );
     }

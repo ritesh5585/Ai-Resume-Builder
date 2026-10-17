@@ -37,6 +37,7 @@ export const POST = asyncHandler(async (req: NextRequest) => {
           _id: newUser._id,
           name: newUser.name,
           email: newUser.email,
+          mobile: newUser.mobile,
         },
       },
     },
