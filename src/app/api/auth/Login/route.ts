@@ -2,13 +2,14 @@ import connectToDB from "@/lib/database";
 import { AppError, asyncHandler } from "@/lib/error";
 import UserModel from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
-import { generateToken } from "@/lib/jwt"; // JWT import zaroori hai
-import { ApiResponse } from "@/types/api.type"; // Response type
+import { generateToken } from "@/lib/jwt";
+import { ApiResponse } from "@/types/api.type";
+import { LoginUser } from "@/types/user.type";
 
 export const POST = asyncHandler(async (req: NextRequest) => {
   await connectToDB();
 
-  const body = await req.json();
+  const body: LoginUser = await req.json();
   const { email, password } = body;
 
   if (!email || !password) {
@@ -18,10 +19,10 @@ export const POST = asyncHandler(async (req: NextRequest) => {
   const user = await UserModel.findOne({ email });
 
   if (!user) {
-    throw new AppError("Invalid email or password", 401);
+    throw new AppError("User not found", 404);
   }
 
-  const isPasswordValid = await (user as any).comparePassword(password);
+  const isPasswordValid = await user.comparePassword(password);
 
   if (!isPasswordValid) {
     throw new AppError("Invalid email or password", 401);

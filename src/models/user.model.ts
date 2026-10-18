@@ -2,7 +2,13 @@ import mongoose from "mongoose";
 import { User } from "../types/user.type";
 import bcrypt from "bcrypt";
 
-const userSchema = new mongoose.Schema<User>(
+// it helps in login function for compare password error
+interface UserDocument extends Omit<User, "_id">, Document {
+    comparePassword(password: string): Promise<boolean>;
+
+}
+
+const userSchema = new mongoose.Schema<UserDocument>(
   {
     name: {
       type: String,
@@ -40,6 +46,6 @@ userSchema.methods.comparePassword = async function (password: string) {
   return await bcrypt.compare(password, this.password);
 };
 
-const UserModel = mongoose.model<User>("User", userSchema);
+const UserModel = mongoose.model<UserDocument>("User", userSchema);
 
 export default UserModel;

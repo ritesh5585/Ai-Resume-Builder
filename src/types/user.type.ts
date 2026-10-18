@@ -1,26 +1,26 @@
 export interface User {
-    _id: string;
-    name: string;
-    email: string;
-    password: string;
-    mobile?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
+  _id: string;
+  name: string;
+  email: string;
+  password: string;
+  mobile?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface RegisterUser {
-    email: string;
-    password: string;
-    name: string;
-    mobile?: string;
+  email: string;
+  password: string;
+  name: string;
+  mobile?: string;
 }
 
 export interface LoginUser {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
 
 export interface JWTpayload {
-    userId: string;
-    email?: string;
+  userId: object;
+  email?: string;
 }
