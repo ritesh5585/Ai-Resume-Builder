@@ -49,6 +49,17 @@ const resumeSchema = new mongoose.Schema<Resume>(
         },
       ],
     },
+    educations: {
+      type: [
+        {
+          institute: String,
+          degree: String,
+          startDate: String,
+          endDate: String,
+
+        },
+      ],
+    },
   },
   {
     timestamps: true,

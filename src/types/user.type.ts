@@ -21,6 +21,6 @@ export interface LoginUser {
 }
 
 export interface JWTpayload {
-  userId: object;
+  userId: string;
   email?: string;
 }
