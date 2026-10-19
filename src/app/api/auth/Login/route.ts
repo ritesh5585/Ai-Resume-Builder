@@ -29,7 +29,7 @@ export const POST = asyncHandler(async (req: NextRequest) => {
   }
 
   const token = generateToken({
-    userId: user._id,
+    userId: user._id.toString(),
   });
 
   const response = NextResponse.json<ApiResponse>(
