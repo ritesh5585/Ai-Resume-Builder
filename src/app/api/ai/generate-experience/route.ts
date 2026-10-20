@@ -15,12 +15,18 @@ export const POST = asyncHandler(async (req: NextRequest) => {
     throw new AppError("All fields are required", 400);
   }
 
+  const techStackStr = Array.isArray(techStack)
+    ? techStack.join(", ")
+    : typeof techStack === "string" && techStack.trim()
+      ? techStack
+      : "n/a";
+
   if (
     experienceLevel.length > 50 ||
     jobRole.length > 100 ||
     years.length > 50 ||
     (company && company.length > 100) ||
-    (techStack && techStack.length > 500)
+    (techStackStr !== "n/a" && techStackStr.length > 500)
   ) {
     throw new AppError("Input exceeds maximum allowed length", 400);
   }
@@ -31,7 +37,7 @@ Inputs:
 - Job Title: ${jobRole}
 - Years of Experience: ${years}
 - Company: ${company || "n/a"}
-- Tech Stack: ${techStack || "n/a"}
+- Tech Stack: ${techStackStr}
 
 Rules:
 1. Generate exactly 4 bullet points.

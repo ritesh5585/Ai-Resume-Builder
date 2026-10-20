@@ -11,15 +11,21 @@ export const POST = asyncHandler(async (req: NextRequest) => {
   const body: GenerateProjectDetails = await req.json();
   const { experienceLevel, jobTitle, techstack } = body;
 
-  if (!experienceLevel || !jobTitle || !techstack?.length) {
+  const techStackStr = Array.isArray(techstack)
+    ? techstack.join(", ")
+    : typeof techstack === "string"
+      ? techstack
+      : "";
+
+  if (!experienceLevel || !jobTitle || !techStackStr.trim()) {
     throw new AppError("All fields are required", 400);
   }
 
   if (
     experienceLevel.length > 50 ||
     jobTitle.length > 100 ||
-    techstack.length > 30 ||
-    techstack.join(", ").length > 500
+    (Array.isArray(techstack) && techstack.length > 30) ||
+    techStackStr.length > 500
   ) {
     throw new AppError("Input exceeds maximum allowed length", 400);
   }
@@ -28,7 +34,7 @@ export const POST = asyncHandler(async (req: NextRequest) => {
 Inputs:
 - Experience Level: ${experienceLevel}
 - Target Role: ${jobTitle}
-- Tech Stack: ${Array.isArray(techstack) ? techstack.join(", ") : techstack}
+- Tech Stack: ${techStackStr}
 
 Rules:
 1. Length: Strictly between 40 to 60 words.

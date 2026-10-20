@@ -39,10 +39,9 @@ export async function rateLimit(identifier: string) {
   }
 
   // Fallback to in-memory rate limiting (10 req/min)
-  const now = Date.now();
   const windowMs = 60 * 1000;
   const timestamps = (memoryStore.get(identifier) || []).filter(
-    (t) => now - t < windowMs,
+    (t) => Date.now() - t < windowMs,
   );
 
   if (timestamps.length >= 10) {
@@ -52,7 +51,7 @@ export async function rateLimit(identifier: string) {
     );
   }
 
-  timestamps.push(now);
+  timestamps.push(Date.now());
   memoryStore.set(identifier, timestamps);
 }
 
