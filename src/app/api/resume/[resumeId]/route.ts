@@ -15,7 +15,7 @@ export const GET = asyncHandler(
     const userId = await getUser(req);
     const { resumeId } = await params;
 
-    const resume = await resumenModel.findById({
+    const resume = await resumenModel.findOne({
       user_id: userId,
       _id: resumeId,
     });
@@ -44,7 +44,7 @@ export const PATCH = asyncHandler(
     const updatedResume = await resumenModel.findOneAndUpdate(
       {
         _id: resumeId,
-        userId: userId,
+        user_id: userId,
       },
       {
         $set: body,
