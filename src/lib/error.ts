@@ -11,11 +11,11 @@ export class AppError extends Error {
 }
 
 export function asyncHandler(
-  handler: (req: NextRequest) => Promise<Response>,
-): (req: NextRequest) => Promise<Response> {
-  return async (req: NextRequest) => {
+  handler: (...args: any[]) => Promise<Response>,
+): (...args: any[]) => Promise<Response> {
+  return async (...args: any[]) => {
     try {
-      return await handler(req);
+      return await handler(...args);
     } catch (error: any) {
       if (error instanceof AppError) {
         return NextResponse.json<ApiResponse>(
