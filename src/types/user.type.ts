@@ -5,6 +5,7 @@ export interface User {
   email: string;
   password: string;
   mobile?: string;
+  googleId?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import Error from "@/component/Error";
+import GoogleButton from "@/component/auth/GoogleBtn";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -54,13 +55,8 @@ export default function RegisterPage() {
       <div className="w-full max-w-sm sm:max-w-md">
         {/* Brand / Logo Mark */}
         <div className="text-center mb-8">
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-white border border-zinc-200 text-zinc-950 font-bold text-lg shadow-sm hover:border-zinc-300 transition-colors"
-          >
-            R
-          </Link>
-          <h1 className="mt-4 text-2xl sm:text-3xl font-semibold tracking-tight text-zinc-950">
+          
+          <h1 className=" text-2xl sm:text-3xl font-semibold tracking-tight text-zinc-950">
             Create account
           </h1>
           <p className="mt-1.5 text-sm text-zinc-500">
@@ -228,6 +224,19 @@ export default function RegisterPage() {
               )}
             </button>
           </form>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-zinc-200" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="px-2 bg-white text-zinc-400 m-2">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          <GoogleButton onError={(error)=> setError(error)} />
         </div>
 
         {/* Footer */}

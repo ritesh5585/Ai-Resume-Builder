@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema<UserDocument>(
       minlength: [10, "Mobile number must be at least 10 characters long"],
       maxlength: [10, "Mobile number must be at least 10 characters long"],
     },
+    googleId: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,
