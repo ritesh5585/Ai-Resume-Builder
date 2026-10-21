@@ -32,7 +32,7 @@ export default function RegisterPage() {
         try {
             setLoading(true);
 
-            await register(name.trim(), email.trim(), password);
+            await register({ name: name.trim(), email: email.trim(), password });
 
             router.replace("/");
         } catch (err: any) {

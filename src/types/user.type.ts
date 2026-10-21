@@ -1,4 +1,3 @@
-import { AuthUser } from "@/services/auth.api";
 
 export interface User {
   _id: string;

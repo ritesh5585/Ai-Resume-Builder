@@ -29,7 +29,7 @@ export default function LoginPage() {
         try {
             setLoading(true);
 
-            await login(email.trim(), password);
+            await login({email: email.trim(), password});
 
             const next = new URLSearchParams(window.location.search).get("next");
             router.replace(next || "/");
