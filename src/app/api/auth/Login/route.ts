@@ -22,6 +22,13 @@ export const POST = asyncHandler(async (req: NextRequest) => {
     throw new AppError("User not found", 404);
   }
 
+  if (!user.password && user.googleId) {
+    throw new AppError(
+      "This account was created with Google. Please use 'Continue with Google' to sign in.",
+      400,
+    );
+  }
+
   const isPasswordValid = await user.comparePassword(password);
 
   if (!isPasswordValid) {
@@ -36,6 +43,14 @@ export const POST = asyncHandler(async (req: NextRequest) => {
     {
       success: true,
       message: "Login successful",
+      data: {
+        user: {
+          _id: user._id.toString(),
+          name: user.name,
+          email: user.email,
+          mobile: user.mobile,
+        },
+      },
     },
     { status: 200 },
   );

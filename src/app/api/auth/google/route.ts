@@ -6,7 +6,12 @@ import { generateToken } from "@/lib/jwt";
 import UserModel from "@/models/user.model";
 import { ApiResponse } from "@/types/api.type";
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const clientId =
+  process.env.GOOGLE_CLIENT_ID ||
+  process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
+  "";
+
+const client = new OAuth2Client(clientId);
 
 export const POST = asyncHandler(async (req: NextRequest) => {
   const { credential } = await req.json();
@@ -16,10 +21,11 @@ export const POST = asyncHandler(async (req: NextRequest) => {
   try {
     const ticket = await client.verifyIdToken({
       idToken: credential,
-      audience: process.env.GOOGLE_CLIENT_ID,
+      audience: clientId,
     });
     payload = ticket.getPayload();
-  } catch {
+  } catch (error) {
+    console.error("Google Auth Error:", error);
     throw new AppError("Invalid Google token", 401);
   }
   if (!payload?.email || !payload.email_verified) {
@@ -34,16 +40,27 @@ export const POST = asyncHandler(async (req: NextRequest) => {
       email: payload.email,
       googleId: payload.sub,
     });
+  } else if (!user.googleId) {
+    user.googleId = payload.sub;
+    await user.save();
   }
 
   const token = generateToken({ userId: user._id.toString() });
   const response = NextResponse.json<ApiResponse>({
     success: true,
     message: "Login successful",
+    data: {
+      user: {
+        _id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        mobile: user.mobile,
+      },
+    },
   });
   response.cookies.set("token", token, {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 60 * 60 * 24 * 2,
     path: "/",

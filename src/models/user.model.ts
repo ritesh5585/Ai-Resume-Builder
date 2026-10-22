@@ -4,8 +4,7 @@ import bcrypt from "bcrypt";
 
 // it helps in login function for compare password error
 interface UserDocument extends Omit<User, "_id">, Document {
-    comparePassword(password: string): Promise<boolean>;
-
+  comparePassword(password: string): Promise<boolean>;
 }
 
 const userSchema = new mongoose.Schema<UserDocument>(
@@ -22,14 +21,12 @@ const userSchema = new mongoose.Schema<UserDocument>(
     },
     password: {
       type: String,
-      required: true,
-      minlength: [8, "Password must be at least 8 characters long"],
+      required: false,
+      minlength: [6, "Password must be at least 6 characters long"],
     },
     mobile: {
       type: String,
       required: false,
-      minlength: [10, "Mobile number must be at least 10 characters long"],
-      maxlength: [10, "Mobile number must be at least 10 characters long"],
     },
     googleId: {
       type: String,
@@ -42,14 +39,17 @@ const userSchema = new mongoose.Schema<UserDocument>(
 );
 
 userSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
+  if (!this.isModified("password") || !this.password) return;
   this.password = await bcrypt.hash(this.password, 10);
 });
 
 userSchema.methods.comparePassword = async function (password: string) {
+  if (!this.password) return false;
   return await bcrypt.compare(password, this.password);
 };
 
-const UserModel = mongoose.model<UserDocument>("User", userSchema);
+const UserModel =
+  (mongoose.models.User as mongoose.Model<UserDocument>) ||
+  mongoose.model<UserDocument>("User", userSchema);
 
 export default UserModel;

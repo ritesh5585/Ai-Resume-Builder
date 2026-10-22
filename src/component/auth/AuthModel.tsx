@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/context/AuthContext";
+import GoogleButton from "@/component/auth/GoogleBtn";
 
 type FormValues = {
   name?: string;
@@ -108,8 +109,8 @@ export default function AuthModal() {
             type="button"
             onClick={() => switchMode("login")}
             className={`py-2 rounded-lg transition-all ${mode === "login"
-                ? "bg-white text-zinc-950 font-semibold shadow-sm border border-zinc-200/60"
-                : "text-zinc-500 hover:text-zinc-900"
+              ? "bg-white text-zinc-950 font-semibold shadow-sm border border-zinc-200/60"
+              : "text-zinc-500 hover:text-zinc-900"
               }`}
           >
             Sign in
@@ -118,8 +119,8 @@ export default function AuthModal() {
             type="button"
             onClick={() => switchMode("register")}
             className={`py-2 rounded-lg transition-all ${mode === "register"
-                ? "bg-white text-zinc-950 font-semibold shadow-sm border border-zinc-200/60"
-                : "text-zinc-500 hover:text-zinc-900"
+              ? "bg-white text-zinc-950 font-semibold shadow-sm border border-zinc-200/60"
+              : "text-zinc-500 hover:text-zinc-900"
               }`}
           >
             Create account
@@ -277,6 +278,17 @@ export default function AuthModal() {
             )}
           </button>
         </form>
+
+        <div className="relative my-4">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-zinc-200" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="px-2 bg-white text-zinc-400">Or continue with</span>
+          </div>
+        </div>
+
+        <GoogleButton onError={(msg) => setServerError(msg)} />
 
         {/* Switch Link */}
         <p className="mt-5 text-center text-xs text-zinc-500">
