@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
   const router = useRouter();
-  const { user, loading, logout } = useAuth();
+  const { user, loading, logout, requireAuth } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -76,30 +76,32 @@ export default function Navbar() {
                   type="button"
                   onClick={handleLogout}
                   disabled={isLoggingOut}
-                  className="text-xs font-medium text-zinc-500 hover:text-zinc-900 border border-zinc-200 hover:border-zinc-300 rounded-lg px-2.5 py-1.5 transition-colors disabled:opacity-50"
+                  className="text-xs font-medium text-zinc-500 hover:text-zinc-900 border border-zinc-200 hover:border-zinc-300 rounded-lg px-2.5 py-1.5 transition-colors disabled:opacity-50 cursor-pointer"
                 >
                   {isLoggingOut ? "..." : "Logout"}
                 </button>
               </div>
             ) : (
-              <Link
-                href="/pages/auth/login"
-                className="hover:text-[#111827] transition-colors font-normal ml-1"
+              <button
+                type="button"
+                onClick={() => requireAuth()}
+                className="hover:text-[#111827] transition-colors font-normal ml-1 cursor-pointer"
               >
                 Log in
-              </Link>
+              </button>
             )}
           </nav>
 
           {/* Mobile Menu Button */}
           <div className="flex items-center gap-2 md:hidden">
             {!loading && !user && (
-              <Link
-                href="/pages/auth/login"
-                className="text-sm font-medium text-[#111827] px-2 py-1"
+              <button
+                type="button"
+                onClick={() => requireAuth()}
+                className="text-sm font-medium text-[#111827] px-2 py-1 cursor-pointer"
               >
                 Log in
-              </Link>
+              </button>
             )}
             <button
               type="button"
@@ -149,13 +151,16 @@ export default function Navbar() {
                 </button>
               </div>
             ) : (
-              <Link
-                href="/pages/auth/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-2 py-1.5 text-base text-[#1b3731] font-medium"
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  requireAuth();
+                }}
+                className="block w-full text-left px-2 py-1.5 text-base text-[#1b3731] font-medium cursor-pointer"
               >
                 Log in
-              </Link>
+              </button>
             )}
           </div>
         )}

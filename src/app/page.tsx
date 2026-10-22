@@ -6,7 +6,7 @@ export default function HomePage() {
       {/* Main Hero Container */}
       <main className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pt-10 sm:pt-16 pb-16 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          
+
           {/* Left Column: Headline, Copy & CTAs */}
           <div className="lg:col-span-7 flex flex-col items-start">
             {/* Category tag with accent line */}
@@ -111,7 +111,7 @@ export default function HomePage() {
           className="mt-20 sm:mt-28 pt-12 sm:pt-16 border-t border-zinc-100/90"
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 lg:gap-16">
-            
+
             {/* Step 01 */}
             <div className="flex flex-col items-start">
               <span className="text-xs font-semibold text-[#c29b68] tracking-widest uppercase mb-2">
