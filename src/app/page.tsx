@@ -30,13 +30,13 @@ export default function HomePage() {
             {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
               <Link
-                href="/pages/resume"
+                href="/pages/dashboard"
                 className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-lg bg-[#1c3933] hover:bg-[#152c27] text-white text-[14px] font-medium transition-all shadow-sm active:scale-[0.98]"
               >
                 Create my resume
               </Link>
               <Link
-                href="/pages/resume"
+                href="/pages/dashboard"
                 className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-lg bg-white hover:bg-zinc-50 border border-zinc-200/90 text-[#171717] text-[14px] font-medium transition-all shadow-sm active:scale-[0.98]"
               >
                 View templates
