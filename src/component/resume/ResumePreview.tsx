@@ -1,3 +1,5 @@
+// components/resume/ResumePreview.tsx -> PURE component: data + template -> A4 resume
+// Builder preview, dashboard thumbnail aur download page teeno yahi use karenge.
 import { memo } from "react";
 import type { ResumeDTO } from "@/services/resume.api";
 
@@ -7,6 +9,7 @@ export const TEMPLATES: { key: TemplateKey; label: string }[] = [
   { key: "modern", label: "Modern" },
 ];
 
+// Template = style tokens. Layout single-column hi rakha hai (ATS ke liye best)
 const THEMES = {
   classic: {
     name: "font-serif text-[34px] leading-tight text-[#1B2F28]",
@@ -22,7 +25,11 @@ const THEMES = {
 
 const bullets = (t?: string) =>
   (t ?? "").split("\n").map((l) => l.replace(/^\s*[-•*]\s*/, "").trim()).filter(Boolean);
-const dates = (s?: string, e?: string) => (s ? `${s} – ${e || "Present"}` : e || "");
+const fmt = (d?: string) => {
+  const m = /^(\d{4})-(\d{2})$/.exec(d ?? "");
+  return m ? new Date(+m[1], +m[2] - 1).toLocaleDateString("en", { month: "short", year: "numeric" }) : d ?? "";
+};
+const dates = (s?: string, e?: string) => (s ? `${fmt(s)} – ${e ? fmt(e) : "Present"}` : fmt(e));
 const clean = (u?: string) => (u ?? "").replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
 
 function Section({ title, cls, children }: { title: string; cls: string; children: React.ReactNode }) {
@@ -44,7 +51,7 @@ function ResumePreview({ data, template = "classic" }: { data: Partial<ResumeDTO
   const education = data.educations ?? [];
 
   return (
-    <div className="min-h-[1123px] w-[794px] bg-white px-12 py-12 font-sans text-[13px] leading-[1.55] text-[#1B2F28]">
+    <div className="min-h-[1123px] w-[794px] bg-white px-12 py-12 print:min-h-0 print:w-full print:px-0 print:py-0 font-sans text-[13px] leading-[1.55] text-[#1B2F28]">
       <header>
         <h1 className={`${t.name} ${p?.fullname ? "" : "opacity-30"}`}>{p?.fullname || "Your Name"}</h1>
         {contact.length > 0 && <p className="mt-2 text-[12px] text-[#5B6A63]">{contact.join("  |  ")}</p>}
@@ -76,24 +83,24 @@ function ResumePreview({ data, template = "classic" }: { data: Partial<ResumeDTO
         </Section>
       )}
 
-      {/* {projects.length > 0 && (
+      {projects.length > 0 && (
         <Section title="Projects" cls={t.heading}>
           {projects.map((pr, i) => (
             <div key={i} className="mb-3">
               <div className="flex flex-wrap items-baseline gap-x-2">
-                <span className="font-semibold">{pr?.title}</span>
-                {pr?.techStack?.length > 0 && <span className="text-[12px] text-[#5B6A63]">{pr?.techStack?.join(", ")}</span>}
+                <span className="font-semibold">{pr.title}</span>
+                {pr.techStack?.length > 0 && <span className="text-[12px] text-[#5B6A63]">{pr.techStack.join(", ")}</span>}
               </div>
-              {pr?.description && <p className="mt-0.5">{pr?.description}</p>}
-              {(pr?.githubURL || pr?.liveURL) && (
+              {pr.description && <p className="mt-0.5">{pr.description}</p>}
+              {(pr.githubURL || pr.liveURL) && (
                 <p className="mt-0.5 text-[12px] text-[#5B6A63]">
-                  {[clean(pr?.githubURL), clean(pr?.liveURL)].filter(Boolean).join("  |  ")}
+                  {[clean(pr.githubURL), clean(pr.liveURL)].filter(Boolean).join("  |  ")}
                 </p>
               )}
             </div>
           ))}
         </Section>
-      )} */}
+      )}
 
       {education.length > 0 && (
         <Section title="Education" cls={t.heading}>

@@ -33,7 +33,7 @@ export const aiService = {
     request<{ summary: string }>(PATHS.summary, "POST", data),
 
   generateSkills: (data: GenerateSkills) =>
-    request<{ skills: string }>(PATHS.skills, "POST", data),
+    request<{ skills: string[] }>(PATHS.skills, "POST", data),
 
   generateExperience: (data: GenerateExperience) =>
     request<{ bullets: string[] }>(PATHS.experience, "POST", data),

@@ -1,4 +1,4 @@
-// lib/steps.ts -> steps ki list EK jagah. Dashboard, stepper, Back/Continue sab yahi se padhenge.
+// lib/steps.ts -> steps ki list EK jagah
 import type { ResumeDTO } from "@/services/resume.api";
 
 export const STEPS = [
@@ -63,6 +63,7 @@ export function getProgress(r: Partial<ResumeDTO>) {
     STEPS.find((s) => s.key !== "review" && !done[s.key as keyof typeof done])
       ?.key ?? "review";
   return {
+    done,
     completed,
     total,
     percent: Math.round((completed / total) * 100),
