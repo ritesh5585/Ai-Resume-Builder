@@ -9,7 +9,7 @@ import { AppError } from "@/lib/error";
 export const POST = asyncHandler(async (req: NextRequest) => {
     await connectDB()
 
-    const userId = await getUser()
+    const userId = await getUser(req)
 
     if (!userId) {
         throw new AppError("User not found", 404)

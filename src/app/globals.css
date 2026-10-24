@@ -138,3 +138,15 @@ body {
     @apply font-sans;
   }
 }
+
+@page {
+  size: A4;
+  margin: 14mm 16mm;
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

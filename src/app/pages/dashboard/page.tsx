@@ -1,6 +1,6 @@
 "use client";
+
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { resumeService } from "@/services/resume.api";
@@ -19,6 +19,7 @@ export default function DashboardPage() {
     setCreating(true);
     try {
       const resume = await resumeService.create();
+      console.log("resume", resume._id)
       router.push(`/dashboard/${resume._id}/personal`);
     } catch (e) {
       setError((e as Error).message);

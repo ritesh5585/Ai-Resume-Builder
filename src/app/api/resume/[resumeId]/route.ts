@@ -5,25 +5,46 @@ import getUser from "@/lib/getUser";
 import resumenModel from "@/models/resume.model";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = asyncHandler(async (req: NextRequest) => {
-  await connectDB();
-  const userId = await getUser(req);
+const ALLOWED_FIELDS = [
+  "title",
+  "targetRole",
+  "experienceLevel",
+  "template",
+  "summary",
+  "skills",
+  "personalInfo",
+  "workExp",
+  "projects",
+  "educations",
+  "certificate",
+] as const;
 
-  const resumes = await resumenModel
-    .find({ user_id: userId })
-    .select(
-      "title summary skills personalInfo workExp projects educations createdAt updatedAt",
-    )
-    .sort({ updatedAt: -1 })
-    .limit(12)
-    .lean();
+export const GET = asyncHandler(
+  async (
+    req: NextRequest,
+    { params }: { params: Promise<{ resumeId: string }> },
+  ) => {
+    await connectDB();
 
-  return NextResponse.json<ApiResponse>({
-    success: true,
-    message: "Resumes fetched",
-    data: resumes,
-  });
-});
+    const userId = await getUser(req);
+    if (!userId) throw new AppError("Unauthorized", 401);
+
+    const { resumeId } = await params;
+
+    const resume = await resumenModel.findOne({
+      _id: resumeId,
+      user_id: userId,
+    });
+
+    if (!resume) throw new AppError("Resume not found", 404);
+
+    return NextResponse.json<ApiResponse>({
+      data: resume,
+      message: "Resume found",
+      success: true,
+    });
+  },
+);
 
 export const PATCH = asyncHandler(
   async (
@@ -33,8 +54,17 @@ export const PATCH = asyncHandler(
     await connectDB();
 
     const userId = await getUser(req);
-    const body = await req.json();
+    if (!userId) throw new AppError("Unauthorized", 401);
+
     const { resumeId } = await params;
+    const body = await req.json();
+
+    const updates: Record<string, unknown> = {};
+    for (const key of ALLOWED_FIELDS) {
+      if (key in body) {
+        updates[key] = body[key];
+      }
+    }
 
     const updatedResume = await resumenModel.findOneAndUpdate(
       {
@@ -42,7 +72,7 @@ export const PATCH = asyncHandler(
         user_id: userId,
       },
       {
-        $set: body,
+        $set: updates,
       },
       {
         new: true,
@@ -50,7 +80,7 @@ export const PATCH = asyncHandler(
       },
     );
 
-    if (!updatedResume) throw new AppError("Failed to update resume", 400);
+    if (!updatedResume) throw new AppError("Resume not found", 404);
 
     return NextResponse.json<ApiResponse>({
       data: updatedResume,

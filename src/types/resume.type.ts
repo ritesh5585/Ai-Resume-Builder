@@ -18,7 +18,7 @@ export interface WorkExp {
 
 export interface Project {
   title: string;
-  descrciption: string;
+  description: string;
   githubURL: string;
   liveURL: string;
   techStack: string[];
@@ -37,10 +37,13 @@ export interface Resume {
   user_id: Types.ObjectId;
   title: string;
   summary: string;
+  targetRole?: string;
+  experienceLevel?: string;
+  template?: string;
+  skills: string;
   personalInfo: PersonalInfo;
   workExp?: WorkExp[];
   projects: Project[];
-  skills: string
   educations: Education[];
   certificate?: string[];
   createdAt?: Date;

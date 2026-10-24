@@ -16,6 +16,22 @@ const resumeSchema = new mongoose.Schema<Resume>(
       type: String,
       default: "",
     },
+    skills: {
+      type: String,
+      default: "",
+    },
+    targetRole: {
+      type: String,
+      default: "",
+    },
+    experienceLevel: {
+      type: String,
+      default: "",
+    },
+    template: {
+      type: String,
+      default: "classic",
+    },
     personalInfo: {
       type: {
         fullname: String,
@@ -42,7 +58,7 @@ const resumeSchema = new mongoose.Schema<Resume>(
       type: [
         {
           title: String,
-          descrciption: String,
+          description: String,
           githubURL: String,
           liveURL: String,
           techStack: [String],
@@ -66,6 +82,6 @@ const resumeSchema = new mongoose.Schema<Resume>(
   },
 );
 
-const resumenModel = mongoose.model("Resume", resumeSchema);
+const resumenModel = mongoose.models.Resume || mongoose.model("Resume", resumeSchema);
 
 export default resumenModel;
