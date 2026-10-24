@@ -5,30 +5,25 @@ import getUser from "@/lib/getUser";
 import resumenModel from "@/models/resume.model";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = asyncHandler(
-  async (
-    req: NextRequest,
-    { params }: { params: Promise<{ resumeId: string }> },
-  ) => {
-    await connectDB();
+export const GET = asyncHandler(async (req: NextRequest) => {
+  await connectDB();
+  const userId = await getUser(req);
 
-    const userId = await getUser(req);
-    const { resumeId } = await params;
+  const resumes = await resumenModel
+    .find({ user_id: userId })
+    .select(
+      "title summary skills personalInfo workExp projects educations createdAt updatedAt",
+    )
+    .sort({ updatedAt: -1 })
+    .limit(12)
+    .lean();
 
-    const resume = await resumenModel.findOne({
-      user_id: userId,
-      _id: resumeId,
-    });
-
-    if (!resume) throw new AppError("Resume not found", 404);
-
-    return NextResponse.json<ApiResponse>({
-      data: resume,
-      message: "Resume found",
-      success: true,
-    });
-  },
-);
+  return NextResponse.json<ApiResponse>({
+    success: true,
+    message: "Resumes fetched",
+    data: resumes,
+  });
+});
 
 export const PATCH = asyncHandler(
   async (

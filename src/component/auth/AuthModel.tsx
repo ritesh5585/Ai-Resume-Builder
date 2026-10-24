@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import AuthCard from "@/component/auth/AuthCard";
 
 export default function AuthModal() {
-  const { modalOpen, closeAuth } = useAuth();
+  const { modalOpen, closeAuth, authMode } = useAuth();
 
   useEffect(() => {
     if (!modalOpen) return;
@@ -29,7 +29,7 @@ export default function AuthModal() {
     >
       <div onClick={(e) => e.stopPropagation()}>
         <AuthCard
-          initialMode="login"
+          initialMode={authMode}
           showCloseButton
           onClose={closeAuth}
           onSuccess={closeAuth}

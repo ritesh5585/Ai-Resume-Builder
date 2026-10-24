@@ -30,7 +30,8 @@ export interface AuthContextType {
   user: AuthUser | null;
   loading: boolean;
   modalOpen: boolean;
-  requireAuth: (action?: () => void) => void;
+  authMode: "login" | "register";
+  requireAuth: (action?: () => void, mode?: "login" | "register") => void;
   closeAuth: () => void;
   login: (data: LoginUser) => Promise<void>;
   register: (data: RegisterUser) => Promise<void>;

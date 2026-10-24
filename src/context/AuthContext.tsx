@@ -11,6 +11,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<"login" | "register">("login");
   const pendingAction = useRef<(() => void) | null>(null);
 
   const syncUser = useCallback(async () => {
@@ -36,9 +37,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const requireAuth = useCallback(
-    (action?: () => void) => {
+    (action?: () => void, mode: "login" | "register" = "login") => {
       if (user) return action?.();
       pendingAction.current = action ?? null;
+      setAuthMode(mode);
       setModalOpen(true);
     },
     [user]
@@ -87,7 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, modalOpen, requireAuth, closeAuth, login, register, googleLogin, logout }}
+      value={{ user, loading, modalOpen, authMode, requireAuth, closeAuth, login, register, googleLogin, logout }}
     >
       {children}
     </AuthContext.Provider>
